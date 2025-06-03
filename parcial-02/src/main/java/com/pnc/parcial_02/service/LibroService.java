@@ -19,4 +19,6 @@ public interface LibroService {
     public List findBooksByPagesRange(int start, int end) throws Exception;
 
     void updateTitleAndLanguage(UUID id, String nuevoTitulo, String nuevoIdioma) throws Exception;
+
+    public Libro createLibro(Libro nuevo) throws Exception;
 }

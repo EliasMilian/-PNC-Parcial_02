@@ -1,12 +1,19 @@
 package com.pnc.parcial_02.service.ServiceImpl;
 
 
+import com.pnc.parcial_02.Domain.Dtos.Create.CreateLibroDTO.CrearLibroDTO;
+import com.pnc.parcial_02.Domain.Dtos.GenericResponse;
 import com.pnc.parcial_02.Domain.entities.Libro;
 import com.pnc.parcial_02.repositories.LibroRepo;
 import com.pnc.parcial_02.service.LibroService;
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Optional;
@@ -51,20 +58,58 @@ private final LibroRepo libroRepo;
         Libro existente = libroRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("No existe Libro con id " + id));
 
-        // 2) Validaciones básicas (puedes agregar más si lo necesitas):
         if (nuevoTitulo == null || nuevoTitulo.isBlank()) {
             throw new IllegalArgumentException("El título no puede estar vacío");
         }
         if (nuevoIdioma == null || nuevoIdioma.isBlank()) {
             throw new IllegalArgumentException("El idioma no puede estar vacío");
         }
-
-        // 3) Asignamos los nuevos valores:
         existente.setTitle(nuevoTitulo);
         existente.setLenguage(nuevoIdioma);
-
-        // 4) Persistimos el cambio:
         libroRepo.save(existente);
-        // → Si quieres devolver el objeto actualizado, podrías cambiar el método para que retorne Libro.
     }
+    @Override
+    public Libro createLibro(Libro nuevo) throws Exception {
+        var existentes = libroRepo.findAllByIsbn(nuevo.getIsbn());
+        if (!existentes.isEmpty()) {
+            throw new EntityExistsException("Ya existe un libro con ISBN: " + nuevo.getIsbn());
+        }
+        return libroRepo.save(nuevo);
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<GenericResponse> createLibro(@RequestBody @Valid CrearLibroDTO dto) {
+
+        Libro libro = new Libro();
+        libro.setTitle(CrearLibroDTO.getTitle());
+        libro.setAuthor(CrearLibroDTO..getAuthor());
+        libro.setIsbn(CrearLibroDTO..getIsbn());
+        libro.setPubYear(CrearLibroDTO..getPubYear());
+        libro.setLenguage(CrearLibroDTO..getLenguage());
+        libro.setPages(CrearLibroDTO..getPages());
+        libro.setGenre(CrearLibroDTO..getGenre());
+
+        try {
+
+            Libro creado = libroService.createLibro(libro);
+
+            return GenericResponse.<Libro>builder()
+                    .message("Libro creado correctamente")
+                    .data(creado)
+                    .build()
+                    .buildResponse();
+
+        } catch (EntityExistsException ex) {
+            return ResponseEntity.badRequest()
+                    .body(GenericResponse.builder()
+                            .message(ex.getMessage())
+                            .build());
+        } catch (Exception ex) {
+            return ResponseEntity.status(500)
+                    .body(GenericResponse.builder()
+                            .message("Error interno: " + ex.getMessage())
+                            .build());
+        }
+    }
+
 }
