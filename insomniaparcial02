@@ -1,0 +1,192 @@
+type: collection.insomnia.rest/5.0
+name: parcial02
+meta:
+  id: wrk_d5a409d031b04ef2bb0020426d2a911a
+  created: 1748927236647
+  modified: 1748927236647
+collection:
+  - url: http://localhost:8080/api/libros/create
+    name: crear libros
+    meta:
+      id: req_95925fa2648e4dbf8506d42fdc418252
+      created: 1748927280918
+      modified: 1748929007762
+      isPrivate: false
+      sortKey: -1748927280918
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"title": "lasiguanaba",
+        	"author": "elias",
+        	"isbn": "12345678",
+        	"pubYear": "1998",
+        	"lenguage":"español",
+        	"pages": 23,
+        	"genre":"horror"
+        	
+        	
+        	
+        	
+        	
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/11.0.2
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/api/libros/_.libro_id/title-language
+    name: Actualizar titulo
+    meta:
+      id: req_f38ffbff80384dd38a5670d0aa50a775
+      created: 1748928256546
+      modified: 1748928998932
+      isPrivate: false
+      sortKey: -1748928256546
+    method: PUT
+    body:
+      mimeType: application/json
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/11.0.2
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/api/libros/genre/Novela
+    name: Buscar por genero
+    meta:
+      id: req_363c61d881fd4d52b467e2a94a2783df
+      created: 1748928503627
+      modified: 1748928690923
+      isPrivate: false
+      sortKey: -1748928503627
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/11.0.2
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/api/libros/isbn/978-84-376-0494-7
+    name: Buscar por ISBN
+    meta:
+      id: req_6752af892dee422bbefe2ca1b2f8874e
+      created: 1748928638270
+      modified: 1748928667107
+      isPrivate: false
+      sortKey: -1748928638270
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/11.0.2
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/api/libros/author/Miguel de Cervantes
+    name: Buscar por autor
+    meta:
+      id: req_e32289a99205434787b58cbf58a6dba4
+      created: 1748928722648
+      modified: 1748928759162
+      isPrivate: false
+      sortKey: -1748928722648
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/11.0.2
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/api/libros/language/Español
+    name: Buscar por idioma
+    meta:
+      id: req_ea09f5f8e3664d53bf6e043092482230
+      created: 1748928766457
+      modified: 1748928793240
+      isPrivate: false
+      sortKey: -1748928766457
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/11.0.2
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/api/libros/pages
+    name: Buscar por rango de pagina
+    meta:
+      id: req_888efd651ea14dbc9c057476d44b4fb9
+      created: 1748928811363
+      modified: 1748928944140
+      isPrivate: false
+      sortKey: -1748928811363
+    method: GET
+    parameters:
+      - id: pair_8d9ec47902cd4832b70b4989431c0970
+        name: start
+        value: "100"
+        disabled: false
+      - id: pair_2ed210b42bb14514921aeece7b1f760e
+        name: end
+        value: "900"
+        disabled: false
+    headers:
+      - name: User-Agent
+        value: insomnia/11.0.2
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_405c0b83d2a1cd5e2729926096a195219c3c7961
+    created: 1748927236655
+    modified: 1748927236655
+environments:
+  name: Base Environment
+  meta:
+    id: env_405c0b83d2a1cd5e2729926096a195219c3c7961
+    created: 1748927236653
+    modified: 1748927236653
+    isPrivate: false
