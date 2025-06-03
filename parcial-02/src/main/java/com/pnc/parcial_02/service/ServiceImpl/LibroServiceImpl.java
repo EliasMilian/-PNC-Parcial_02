@@ -1,0 +1,70 @@
+package com.pnc.parcial_02.service.ServiceImpl;
+
+
+import com.pnc.parcial_02.Domain.entities.Libro;
+import com.pnc.parcial_02.repositories.LibroRepo;
+import com.pnc.parcial_02.service.LibroService;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+@Service
+@RequiredArgsConstructor
+public class LibroServiceImpl implements LibroService {
+
+private final LibroRepo libroRepo;
+
+
+@Override
+   public List<Libro> findAllBooksByAuthor(String author)  {
+    return libroRepo.findAllByAuthor(author);
+}
+@Override
+    public List<Libro> findBooksByLenguage (String lenguage){
+
+    return libroRepo.findAllByLenguage(lenguage);
+}
+
+@Override
+    public List<Libro> findBooksByGenre(String genre) {
+    return libroRepo.findAllByGenre(genre);
+}
+
+@Override
+    public Optional<Libro> findBooksByIsbn(String isbn){
+    return libroRepo.findAllByIsbn(isbn);
+}
+    @Override
+    public List<Libro> findBooksByPagesRange(int start, int end) throws Exception {
+        if (start > end) {
+            throw new IllegalArgumentException("El valor inicial no puede ser mayor que el final");
+        }
+        return libroRepo.findAllByPagesBetween(start, end);
+    }
+
+    @Override
+    public void updateTitleAndLanguage(UUID id, String nuevoTitulo, String nuevoIdioma) throws Exception {
+        Libro existente = libroRepo.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("No existe Libro con id " + id));
+
+        // 2) Validaciones básicas (puedes agregar más si lo necesitas):
+        if (nuevoTitulo == null || nuevoTitulo.isBlank()) {
+            throw new IllegalArgumentException("El título no puede estar vacío");
+        }
+        if (nuevoIdioma == null || nuevoIdioma.isBlank()) {
+            throw new IllegalArgumentException("El idioma no puede estar vacío");
+        }
+
+        // 3) Asignamos los nuevos valores:
+        existente.setTitle(nuevoTitulo);
+        existente.setLenguage(nuevoIdioma);
+
+        // 4) Persistimos el cambio:
+        libroRepo.save(existente);
+        // → Si quieres devolver el objeto actualizado, podrías cambiar el método para que retorne Libro.
+    }
+}
