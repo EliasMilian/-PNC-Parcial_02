@@ -77,39 +77,6 @@ private final LibroRepo libroRepo;
         return libroRepo.save(nuevo);
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<GenericResponse> createLibro(@RequestBody @Valid CrearLibroDTO dto) {
 
-        Libro libro = new Libro();
-        libro.setTitle(CrearLibroDTO.getTitle());
-        libro.setAuthor(CrearLibroDTO..getAuthor());
-        libro.setIsbn(CrearLibroDTO..getIsbn());
-        libro.setPubYear(CrearLibroDTO..getPubYear());
-        libro.setLenguage(CrearLibroDTO..getLenguage());
-        libro.setPages(CrearLibroDTO..getPages());
-        libro.setGenre(CrearLibroDTO..getGenre());
-
-        try {
-
-            Libro creado = libroService.createLibro(libro);
-
-            return GenericResponse.<Libro>builder()
-                    .message("Libro creado correctamente")
-                    .data(creado)
-                    .build()
-                    .buildResponse();
-
-        } catch (EntityExistsException ex) {
-            return ResponseEntity.badRequest()
-                    .body(GenericResponse.builder()
-                            .message(ex.getMessage())
-                            .build());
-        } catch (Exception ex) {
-            return ResponseEntity.status(500)
-                    .body(GenericResponse.builder()
-                            .message("Error interno: " + ex.getMessage())
-                            .build());
-        }
-    }
 
 }

@@ -1,9 +1,11 @@
 package com.pnc.parcial_02.controllers;
 
+import com.pnc.parcial_02.Domain.Dtos.Create.CreateLibroDTO.CrearLibroDTO;
 import com.pnc.parcial_02.Domain.Dtos.Create.CreateLibroDTO.UpdateTitleDTO;
 import com.pnc.parcial_02.Domain.Dtos.GenericResponse;
 import com.pnc.parcial_02.Domain.entities.Libro;
 import com.pnc.parcial_02.service.LibroService;
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -128,4 +130,39 @@ public class LibroControllers  {
         return GenericResponse.<Map<String, String>>builder()
                 .message("Error de validación").data(errores).build().buildResponse();
     }
+    @PostMapping("/create")
+    public ResponseEntity<GenericResponse> createLibro(@RequestBody @Valid CrearLibroDTO dto) {
+
+        Libro libro = new Libro();
+        libro.setTitle(dto.getTitle());
+        libro.setAuthor(dto.getAuthor());
+        libro.setIsbn(dto.getIsbn());
+        libro.setPubYear(dto.getPubYear());
+        libro.setLenguage(dto.getLenguage());
+        libro.setPages(dto.getPages());
+        libro.setGenre(dto.getGenre());
+
+        try {
+
+            Libro creado = libroService.createLibro(libro);
+
+            return GenericResponse.<Libro>builder()
+                    .message("Libro creado correctamente")
+                    .data(creado)
+                    .build()
+                    .buildResponse();
+
+        } catch (EntityExistsException ex) {
+            return ResponseEntity.badRequest()
+                    .body(GenericResponse.builder()
+                            .message(ex.getMessage())
+                            .build());
+        } catch (Exception ex) {
+            return ResponseEntity.status(500)
+                    .body(GenericResponse.builder()
+                            .message("Error interno: " + ex.getMessage())
+                            .build());
+        }
+    }
+
 }
